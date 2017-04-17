@@ -3,9 +3,9 @@ class Review < ApplicationRecord
 
 	validates_uniqueness_of :review_id
 
-	def self.pull_reviews(city_id)
+	def self.pull_reviews_by_city(city_id)
 
-		hostels = HwProperty.where(provider_city_id: city_id).where('id > ?', 6953).order('id ASC') #id = 3864
+		hostels = HwProperty.where(provider_city_id: city_id).order('id ASC')
 
 		hostels.each do |hostel|
 			review_scraper(hostel)
@@ -13,18 +13,38 @@ class Review < ApplicationRecord
 
 	end
 
+	def self.pull_reviews_by_hostel(id)
+		hostel = HwProperty.find(id)
+		review_scraper(hostel)
+	end
+
 
 	def self.review_scraper(hostel)
 		a = Mechanize.new
 
+		crashed_on = []
 		cont = true
 		i = 1
+		r_id = 0 #variable to check if stuck in infinite loop
 
 		while cont
-			hostel_formatted = hostel.name.gsub(' - ','-').gsub('&amp;','and').gsub(' ','-').gsub('\'','-').gsub(',','')
+
+			hostel_formatted = hostel.name.gsub('&amp;', '-and-').gsub(/[^0-9A-Za-z -]/, '').gsub(' - ','-').gsub(' ','-').gsub('--','-')
 			url = "http://www.hostelworld.com/hosteldetails.php/#{hostel_formatted}/#{hostel.city}/#{hostel.provider_id}/reviews?lang=all&sortOrder=newest&showOlderReviews=1&page=#{i}#reviewFilters"
 			puts "******PAGE: " + url.to_s
 			p = a.get(url)
+
+			#check if stuck in infinite loop, if yes break loop
+			if i == 1
+				r_id = p.search('.reviewlisting')[0].search('.reviewtext')[0]['id'].partition('w').last.to_i
+			end
+			if i == 2
+				first_id = p.search('.reviewlisting')[0].search('.reviewtext')[0]['id'].partition('w').last.to_i
+				if first_id == r_id
+					break
+				end
+			end
+
 			reviews = p.search('.reviewlisting')
 			reviews.each do |review|
 

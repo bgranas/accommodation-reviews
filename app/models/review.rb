@@ -29,7 +29,7 @@ class Review < ApplicationRecord
 
 		while cont
 
-			hostel_formatted = hostel.name.gsub('&amp;', '-and-').gsub(/[^0-9A-Za-z -]/, '').gsub(' - ','-').gsub(' ','-').gsub('--','-')
+			hostel_formatted = hostel.name.gsub('&amp;', '-and-').gsub('  ',' ').gsub(/[^0-9A-Za-z -]/, '').gsub(' - ','-').gsub(' ','-').gsub('--','-')
 			url = "http://www.hostelworld.com/hosteldetails.php/#{hostel_formatted}/#{hostel.city}/#{hostel.provider_id}/reviews?lang=all&sortOrder=newest&showOlderReviews=1&page=#{i}#reviewFilters"
 			puts "******PAGE: " + url.to_s
 			p = a.get(url)

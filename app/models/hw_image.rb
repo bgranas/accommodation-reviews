@@ -1,0 +1,2 @@
+class HwImage < ApplicationRecord
+end

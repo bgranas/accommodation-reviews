@@ -1,0 +1,2 @@
+class BookingPropertyFacility < ApplicationRecord
+end

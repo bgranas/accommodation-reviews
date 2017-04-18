@@ -1,0 +1,2 @@
+class BookingPropertyReview < ApplicationRecord
+end

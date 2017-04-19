@@ -15,7 +15,8 @@ class CreateBookingProperties < ActiveRecord::Migration[5.0]
     	t.string :city
     	t.string :provider_city_id
     	t.string :country_code
-    	t.integer :property_type
+    	t.integer :property_type_id
+      t.string :property_type
     	t.text :description
     	t.string :base_currency
     	t.decimal :lat
@@ -27,6 +28,7 @@ class CreateBookingProperties < ActiveRecord::Migration[5.0]
     	t.integer :max_rate
     	t.integer :nr_rooms
     	t.string :url
+      t.string :pagename
       t.timestamps
     end
   end

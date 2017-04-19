@@ -134,6 +134,20 @@ module HostelWorldHelper
 
               f.save
             end
+
+            photos = prop['propertyImages']
+            photos&.each do |photo|
+              puts photo
+              p = HwImage.new
+
+              p.hw_property_id = t.id
+              p.image_size = photo['imageSize']
+              p.url = photo['imageURL']
+              p.height = photo['imageHeight']
+              p.width = photo['imageWidth']
+
+              p.save
+            end
           end
         else
           puts 'Something went wrong or there are no hostels to return'
@@ -142,6 +156,20 @@ module HostelWorldHelper
         i = i + 1
       end   
 
+    end
+
+    def self.test_hw
+      key = 'triphappy' # API user
+      signature = '7de435e9e463259b35250e323faada2fabccce1f' # our secret with a algorithm to transform it
+
+      options = {}
+      # need to use FIXIE proxy to hit hostelworld
+      fixie_url = 'http://fixie:Wsqf4ylq0ORZILe@velodrome.usefixie.com:80' # for fixing IP in development
+      proxy = URI(fixie_url)
+      options = {http_proxyaddr: proxy.host, http_proxyport: proxy.port, http_proxyuser: proxy.user, http_proxypass: proxy.password}
+      query_url = "https://affiliate.xsapi.webresint.com/1.1/propertiesinformation.json?consumer_key=#{key}&consumer_signature=#{signature}&PageNumber=1"
+      response = HTTParty.get(query_url, options)
+      puts response
     end
 
   end

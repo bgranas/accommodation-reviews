@@ -1,24 +1,10 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a tool to gather and analyze accommodation reviews for major property booking sites. This is built in Ruby on Rails.
 
-Things you may want to cover:
+The tool also has the ability to estimate estimate inventory availability on a property and city level in order to analyze the competitvenss of a single property, as well as the health of the overall market.
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+To Do:
+* Automatic gathering of new reviews
+* Daily gathering of available inventory for select cities or properties
+* Text-level analysis of reviews to determine patterns at the property level

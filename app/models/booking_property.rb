@@ -9,11 +9,11 @@ class BookingProperty < ApplicationRecord
     a = Mechanize.new
     a.user_agent_alias = 'Windows Chrome'
 
-    hotels = BookingProperty.where(review_count: nil).order('id ASC')
+    hotels = BookingProperty.where(id: 5563) #where(review_count: nil).order('id ASC')
 
     hotels.each do |hotel|
       puts 'STARTING: ' + hotel.id.to_s
-      page = a.get(hotel.hotel_url)
+      page = a.get(hotel.url)
 
       begin
         review_score = page.search('.average.js--hp-scorecard-scoreval')[0].text.squish if page.search('.average.js--hp-scorecard-scoreval')[0]
@@ -25,11 +25,11 @@ class BookingProperty < ApplicationRecord
           facilities = page.search('#review_list_score_breakdown .review_score_value')[3].text if page.search('#review_list_score_breakdown .review_score_value')[3]
           staff = page.search('#review_list_score_breakdown .review_score_value')[4].text if page.search('#review_list_score_breakdown .review_score_value')[4]
           value_for_money = page.search('#review_list_score_breakdown .review_score_value')[5].text if page.search('#review_list_score_breakdown .review_score_value')[5]
-          free_wifi = page.search('#review_list_score_breakdown .review_score_value')[6].text if page.search('#review_list_score_breakdown .review_score_value')[6]
+          #free_wifi = page.search('#review_list_score_breakdown .review_score_value')[6].text if page.search('#review_list_score_breakdown .review_score_value')[6]
 
-          hotel.update_attributes overall_rating: review_score, review_count: review_number, cleanliness: cleanliness,
-                                         comfort: comfort, location: location, facilities: facilities, staff: staff,
-                                         value_for_money: value_for_money, free_wifi: free_wifi
+          hotel.update_attributes overall_rating: review_score, review_count: review_number, cleanliness_rating: cleanliness,
+                                         comfort_rating: comfort, location_rating: location, facilities_rating: facilities, staff_rating: staff,
+                                         value_rating: value_for_money
           sleep(1)
         else
           hotel.update_attributes(overall_rating: nil)

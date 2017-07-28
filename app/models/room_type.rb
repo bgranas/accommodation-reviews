@@ -4,25 +4,29 @@ class RoomType < ApplicationRecord
 	include HTTParty
 	def self.get_room_types(provider_id)
 		hostels = HwProperty.where(provider_city_id: provider_id).order('id ASC')
-		check_in = "2017-08-15"
-		check_out = "2017-08-16"
+		check_in = "2017-09-06"
+		check_out = "2017-09-07"
 		hostels.each do |hostel|
+
 			url = "http://www.hostelworld.com/microsite/get-availability?dateFrom=#{check_in}&dateTo=#{check_out}&propNum=#{hostel.provider_id}&number_of_guests=1"
 			response = HTTParty.get(url)
 
-			dorms = response['rooms']['dorms']
-			privates = response['rooms']['privates']
+			dorms = response['rooms']['dorms'] if response['rooms']
+			privates = response['rooms']['privates'] if response['privates']
 
-			if dorms.length > 0
+
+			if dorms
 				dorms.each do |dorm|
 					add_room(dorm, "dorm", hostel.id)
 				end
 			end
-			if privates.length > 0
+
+			if privates
 				privates.each do |priv|
 					add_room(priv, "private", hostel.id)
 				end
 			end
+
 		end
 	end
 
@@ -39,9 +43,9 @@ class RoomType < ApplicationRecord
 		r.room_subtype = "#{room['numofbeds']} #{room['roomtypename']}"
 		r.price = room['averagePrice'][0]
 
+		r.save
+
 		puts r.room_id
 		puts r.room_subtype
-
-		r.save
 	end
 end

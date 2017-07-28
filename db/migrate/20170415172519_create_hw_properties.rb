@@ -20,7 +20,7 @@ class CreateHwProperties < ActiveRecord::Migration[5.0]
     	t.integer :provider_country_id
     	t.string :property_type
     	t.text :description
-    	t.string :base_currfency
+    	t.string :base_currency
     	t.decimal :lat
     	t.decimal :lng
     	t.string :directions
